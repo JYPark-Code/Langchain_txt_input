@@ -8,6 +8,7 @@ __pycache__/
 
 # txt files
 *.txt
+.chroma/
 
 # Distribution / packaging
 .Python
