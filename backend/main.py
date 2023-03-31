@@ -6,11 +6,8 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.text_splitter import CharacterTextSplitter
 from langchain import OpenAI, VectorDBQA
-# from langchain.document_loaders import DirectoryLoader
 from langchain.document_loaders.unstructured import UnstructuredFileLoader
-from langchain.chat_models import ChatOpenAI
-# import magic
-# import nltk
+# from langchain.chat_models import ChatOpenAI
 
 
 app = FastAPI()
@@ -26,6 +23,7 @@ app.add_middleware(
 
 load_dotenv()  # load variables from .env file
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
 
 @app.post("/add_txts/")
 async def add_txts(file: UploadFile = File(...)):
@@ -48,7 +46,7 @@ async def add_txts(file: UploadFile = File(...)):
 @app.post("/query/")
 async def query(query: str):
     try:
-        qa = VectorDBQA.from_chain_type(llm=ChatOpenAI(), chain_type="stuff", vectorstore=docsearch)
+        qa = VectorDBQA.from_chain_type(llm=OpenAI(temperature=0, max_tokens=500), chain_type="stuff", vectorstore=docsearch)
         result = qa.run(query)
         while result.startswith('\n'):
             result = result[1:]
